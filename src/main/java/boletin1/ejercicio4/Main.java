@@ -1,4 +1,4 @@
-package boletin1.ejercicio3;
+package boletin1.ejercicio4;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -23,7 +23,7 @@ public class Main {
 
             mostrarProductosValorLetra(precio, primeraLetra);
 
-        } catch (Ejercicio3Exception e) {
+        } catch (Ejercicio4Exception e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println("Error de entrada: " + e.getMessage());
@@ -32,12 +32,12 @@ public class Main {
         }
     }
 
-    public static void mostrarProductosValorLetra(int precio, String primeraLetra) throws Ejercicio3Exception {
+    public static void mostrarProductosValorLetra(int precio, String primeraLetra) throws Ejercicio4Exception {
         if (precio < 0) {
-            throw new Ejercicio3Exception("El precio no puede ser negativo");
+            throw new Ejercicio4Exception("El precio no puede ser negativo");
         }
         if (primeraLetra.isEmpty()) {
-            throw new Ejercicio3Exception("La letra inicial no puede estar vacía");
+            throw new Ejercicio4Exception("La letra inicial no puede estar vacía");
         }
 
         Properties properties = new Properties();
@@ -48,7 +48,7 @@ public class Main {
             String password = properties.getProperty("db.password");
 
             try (Connection connection = DriverManager.getConnection(url, usuario, password)) {
-                PreparedStatement ps = connection.prepareStatement("SELECT productCode, productName, buyPrice FROM products WHERE buyPrice < ? AND productName LIKE ?");
+                PreparedStatement ps = connection.prepareStatement("SELECT productCode, LOWER(productName) AS productName, buyPrice FROM products WHERE buyPrice < ? AND productName LIKE ?");
                 ps.setInt(1, precio);
                 ps.setString(2, primeraLetra + "%");
 
